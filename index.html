@@ -4,165 +4,522 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Maulik Patel | Senior Data Analyst</title>
-<meta name="description" content="Maulik Patel, Senior Data Analyst at Capital One in Dallas, TX. Data pipelines, ETL, and data products. Previously JPMorgan Chase and NetJets.">
+<meta name="description" content="Maulik Patel, Senior Data Analyst at Capital One in Dallas, TX. Analytics, BI, and the data pipelines that feed them. Previously JPMorgan Chase and NetJets.">
 <style>
   :root {
-    --bg: #0b0f14;
-    --surface: #121820;
-    --surface2: #1a2230;
-    --text: #e6edf3;
-    --muted: #8b98a5;
-    --accent: #4da3ff;
-    --accent2: #7ee2b8;
-    --border: #232d3b;
+    --bg: #070a0f;
+    --bg2: #0b1018;
+    --surface: #101725;
+    --surface2: #16202f;
+    --text: #e8eef5;
+    --muted: #93a1b3;
+    --accent: #57a6ff;
+    --accent2: #64e3b0;
+    --accent3: #b48cff;
+    --border: #1e2a3c;
+    --shadow: rgba(0, 0, 0, .45);
   }
   @media (prefers-color-scheme: light) {
     :root {
-      --bg: #f7f9fb; --surface: #ffffff; --surface2: #eef2f6;
-      --text: #16202a; --muted: #5b6b7a; --accent: #0b6bcb;
-      --accent2: #0a8a5f; --border: #dde5ec;
+      --bg: #f6f8fb; --bg2: #eef2f7; --surface: #ffffff; --surface2: #e9eef5;
+      --text: #131c28; --muted: #5a6b7e; --accent: #0b6bcb; --accent2: #0a8a5f;
+      --accent3: #6d3fc4; --border: #d9e2ec; --shadow: rgba(20, 40, 70, .12);
     }
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     background: var(--bg); color: var(--text);
     font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    line-height: 1.6;
+    line-height: 1.65; overflow-x: hidden;
   }
-  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
-  header { padding: 88px 0 56px; }
-  .kicker { color: var(--accent2); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: .8rem; }
-  h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); line-height: 1.1; margin: 12px 0; }
-  .tagline { color: var(--muted); font-size: 1.15rem; max-width: 620px; }
-  .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+  ::selection { background: var(--accent); color: #fff; }
+
+  /* Scroll progress bar */
+  #progress {
+    position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+    z-index: 100; transition: width .08s linear;
+  }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 90;
+    display: flex; justify-content: center; gap: 4px;
+    padding: 14px 16px;
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    background: color-mix(in srgb, var(--bg) 72%, transparent);
+    border-bottom: 1px solid transparent;
+    transition: border-color .3s ease;
+  }
+  nav.scrolled { border-bottom-color: var(--border); }
+  nav a {
+    color: var(--muted); text-decoration: none; font-size: .88rem; font-weight: 600;
+    padding: 6px 14px; border-radius: 999px; transition: color .2s, background .2s;
+  }
+  nav a:hover { color: var(--text); }
+  nav a.active { color: var(--text); background: var(--surface2); }
+
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  /* Hero */
+  header {
+    min-height: 100svh; display: flex; align-items: center; position: relative;
+  }
+  #particles {
+    position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;
+  }
+  .hero-inner { position: relative; padding: 96px 0 64px; }
+  .kicker {
+    color: var(--accent2); font-weight: 700; letter-spacing: .16em;
+    text-transform: uppercase; font-size: .78rem;
+    opacity: 0; animation: rise .8s ease .1s forwards;
+  }
+  h1 {
+    font-size: clamp(2.6rem, 7.5vw, 4.6rem); line-height: 1.05; margin: 14px 0 4px;
+    letter-spacing: -.02em;
+    opacity: 0; animation: rise .8s ease .25s forwards;
+  }
+  .gradient-text {
+    background: linear-gradient(92deg, var(--accent), var(--accent2) 55%, var(--accent3));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    background-size: 200% 100%;
+    animation: rise .8s ease .25s forwards, shimmer 6s ease-in-out 1s infinite;
+    opacity: 0;
+    display: inline-block;
+  }
+  .tagline {
+    color: var(--muted); font-size: clamp(1.05rem, 2.4vw, 1.3rem); max-width: 640px;
+    margin-top: 18px;
+    opacity: 0; animation: rise .8s ease .4s forwards;
+  }
+  .tagline strong { color: var(--text); }
+  .cta-row {
+    display: flex; gap: 12px; flex-wrap: wrap; margin-top: 34px;
+    opacity: 0; animation: rise .8s ease .55s forwards;
+  }
   .btn {
-    display: inline-block; padding: 10px 20px; border-radius: 8px;
-    text-decoration: none; font-weight: 600; font-size: .95rem;
+    display: inline-block; padding: 12px 24px; border-radius: 10px;
+    text-decoration: none; font-weight: 650; font-size: .95rem;
     border: 1px solid var(--border); color: var(--text); background: var(--surface);
-    transition: transform .15s ease, border-color .15s ease;
+    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
   }
-  .btn:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .btn:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 10px 28px var(--shadow); }
   .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-  section { padding: 40px 0; border-top: 1px solid var(--border); }
-  h2 { font-size: 1.5rem; margin-bottom: 20px; }
-  h2 .hash { color: var(--accent); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
-  .card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-    padding: 20px; display: flex; flex-direction: column; gap: 8px;
-    transition: transform .15s ease, border-color .15s ease;
+  .scroll-hint {
+    position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%);
+    color: var(--muted); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+    opacity: 0; animation: rise 1s ease 1.2s forwards;
   }
-  .card:hover { transform: translateY(-3px); border-color: var(--accent); }
-  .card a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 1.05rem; }
+  .scroll-hint::after {
+    content: ""; display: block; width: 1px; height: 34px; margin: 8px auto 0;
+    background: linear-gradient(var(--muted), transparent);
+    animation: drip 1.6s ease-in-out infinite;
+  }
+
+  @keyframes rise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+  @keyframes shimmer { 0%,100% { background-position: 0% 0; } 50% { background-position: 100% 0; } }
+  @keyframes drip { 0% { transform: scaleY(0); transform-origin: top; } 45% { transform: scaleY(1); transform-origin: top; } 55% { transform: scaleY(1); transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+  /* Sections + reveal */
+  section { padding: 84px 0; }
+  .reveal { opacity: 0; transform: translateY(34px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal-d1 { transition-delay: .08s; } .reveal-d2 { transition-delay: .16s; }
+  .reveal-d3 { transition-delay: .24s; } .reveal-d4 { transition-delay: .32s; }
+  .reveal-d5 { transition-delay: .40s; } .reveal-d6 { transition-delay: .48s; }
+
+  h2 { font-size: clamp(1.5rem, 3.4vw, 2rem); margin-bottom: 8px; letter-spacing: -.01em; }
+  .sub { color: var(--muted); margin-bottom: 36px; max-width: 620px; }
+  h2 .hash { color: var(--accent); }
+
+  /* Metrics */
+  .metrics {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 16px; padding: 26px 0 0;
+  }
+  .metric {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 24px 20px; text-align: center;
+  }
+  .metric .num {
+    font-size: 2.1rem; font-weight: 800; letter-spacing: -.02em;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .metric .lbl { color: var(--muted); font-size: .84rem; margin-top: 4px; }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 34px; }
+  .timeline::before {
+    content: ""; position: absolute; left: 8px; top: 6px; bottom: 6px; width: 2px;
+    background: linear-gradient(var(--accent), var(--accent2), transparent);
+  }
+  .t-item { position: relative; padding: 0 0 40px; }
+  .t-item:last-child { padding-bottom: 0; }
+  .t-item::before {
+    content: ""; position: absolute; left: -32px; top: 8px; width: 14px; height: 14px;
+    border-radius: 50%; background: var(--bg);
+    border: 3px solid var(--accent);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+  .t-when { color: var(--accent2); font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .t-item h3 { font-size: 1.15rem; margin: 6px 0 4px; }
+  .t-item p { color: var(--muted); font-size: .95rem; max-width: 640px; }
+
+  /* Projects */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 24px; display: flex; flex-direction: column; gap: 10px;
+    position: relative; overflow: hidden;
+    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    transform-style: preserve-3d; will-change: transform;
+  }
+  .card::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in srgb, var(--accent) 9%, transparent), transparent 42%);
+    opacity: 0; transition: opacity .3s ease; pointer-events: none;
+  }
+  .card:hover { border-color: var(--accent); box-shadow: 0 16px 44px var(--shadow); }
+  .card:hover::before { opacity: 1; }
+  .card a.title { color: var(--accent); text-decoration: none; font-weight: 750; font-size: 1.08rem; }
   .card p { color: var(--muted); font-size: .92rem; flex: 1; }
   .tags { display: flex; gap: 6px; flex-wrap: wrap; }
   .tag {
-    font-size: .72rem; padding: 3px 9px; border-radius: 999px;
-    background: var(--surface2); color: var(--accent2); font-weight: 600;
+    font-size: .7rem; padding: 4px 10px; border-radius: 999px;
+    background: var(--surface2); color: var(--accent2); font-weight: 650;
+    letter-spacing: .03em;
   }
-  .xp { display: flex; flex-direction: column; }
-  .xp-item { display: grid; grid-template-columns: 130px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px dashed var(--border); }
-  .xp-item:last-child { border-bottom: none; }
-  .xp-when { color: var(--muted); font-size: .88rem; padding-top: 2px; }
-  .xp-what strong { display: block; font-size: 1.02rem; }
-  .xp-what span { color: var(--muted); font-size: .92rem; }
-  .skills { display: flex; gap: 8px; flex-wrap: wrap; }
-  .skill { padding: 6px 14px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); font-size: .88rem; }
-  footer { padding: 48px 0 64px; color: var(--muted); font-size: .88rem; text-align: center; }
+
+  /* Skills */
+  .skill-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+  .skill-group {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px;
+  }
+  .skill-group h3 { font-size: .82rem; text-transform: uppercase; letter-spacing: .12em; color: var(--accent2); margin-bottom: 14px; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    padding: 7px 14px; border-radius: 9px; background: var(--surface2);
+    border: 1px solid var(--border); font-size: .87rem;
+    transition: transform .18s ease, border-color .18s ease;
+  }
+  .chip:hover { transform: translateY(-2px); border-color: var(--accent); }
+
+  /* Contact */
+  .contact-band {
+    background: linear-gradient(140deg, var(--surface), var(--bg2));
+    border: 1px solid var(--border); border-radius: 22px;
+    padding: 56px 40px; text-align: center;
+  }
+  .contact-band h2 { margin-bottom: 10px; }
+  .contact-band p { color: var(--muted); max-width: 520px; margin: 0 auto 28px; }
+
+  footer { padding: 44px 0 60px; color: var(--muted); font-size: .86rem; text-align: center; }
   footer a { color: var(--accent); text-decoration: none; }
-  @media (max-width: 560px) { .xp-item { grid-template-columns: 1fr; gap: 4px; } header { padding-top: 56px; } }
+
+  @media (max-width: 600px) {
+    nav { gap: 0; } nav a { padding: 6px 9px; font-size: .8rem; }
+    section { padding: 60px 0; }
+    .contact-band { padding: 40px 22px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    .kicker, h1, .gradient-text, .tagline, .cta-row, .scroll-hint, .reveal { opacity: 1 !important; transform: none !important; }
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <header>
-    <div class="kicker">Dallas, TX</div>
-    <h1>Maulik Patel</h1>
-    <p class="tagline"><strong>Senior Data Analyst at Capital One.</strong> I move messy data from where it is to where it is useful, reliably, every day. Pipelines, ETL, and data products that people actually use.</p>
+<div id="progress"></div>
+
+<nav id="nav">
+  <a href="#top" class="active">Home</a>
+  <a href="#experience">Experience</a>
+  <a href="#projects">Projects</a>
+  <a href="#skills">Skills</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<header id="top">
+  <canvas id="particles"></canvas>
+  <div class="wrap hero-inner">
+    <div class="kicker">Dallas, TX · Analytics &amp; Data</div>
+    <h1>Maulik Patel<br><span class="gradient-text">turns data into decisions.</span></h1>
+    <p class="tagline"><strong>Senior Data Analyst at Capital One.</strong> Seven years across banking and aviation building the analytics, BI, and automated pipelines that leaders actually use.</p>
     <div class="cta-row">
       <a class="btn primary" href="https://www.linkedin.com/in/maupatel">LinkedIn</a>
       <a class="btn" href="https://github.com/maupatel">GitHub</a>
       <a class="btn" href="mailto:maulik737@gmail.com">Email me</a>
     </div>
-  </header>
+  </div>
+  <div class="scroll-hint">Scroll</div>
+</header>
 
-  <section id="experience">
-    <h2><span class="hash">#</span> Experience</h2>
-    <div class="xp">
-      <div class="xp-item">
-        <div class="xp-when">Now</div>
-        <div class="xp-what">
-          <strong>Capital One · Senior Data Analyst</strong>
-          <span>Building and maintaining the pipelines and data products behind analytics at a top-10 US bank.</span>
-        </div>
+<section id="metrics-band">
+  <div class="wrap">
+    <div class="metrics">
+      <div class="metric reveal"><div class="num" data-count="7" data-suffix="+">0</div><div class="lbl">Years in data</div></div>
+      <div class="metric reveal reveal-d1"><div class="num" data-count="3">0</div><div class="lbl">Industry-leading employers</div></div>
+      <div class="metric reveal reveal-d2"><div class="num" data-count="6">0</div><div class="lbl">Side projects shipped</div></div>
+      <div class="metric reveal reveal-d3"><div class="num" data-count="365" data-suffix="/yr">0</div><div class="lbl">Automated pipeline runs</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <h2 class="reveal"><span class="hash">#</span> Experience</h2>
+    <p class="sub reveal reveal-d1">Analytics first. Banking scale. Automation everywhere it earns its keep.</p>
+    <div class="timeline">
+      <div class="t-item reveal">
+        <div class="t-when">Now</div>
+        <h3>Capital One · Senior Data Analyst</h3>
+        <p>Analytics and data products at a top-10 US bank: the analyses behind decisions, the pipelines that keep them fresh, and the data quality that keeps them trusted.</p>
       </div>
-      <div class="xp-item">
-        <div class="xp-when">Previously</div>
-        <div class="xp-what">
-          <strong>JPMorgan Chase · ETL Engineering</strong>
-          <span>ETL at scale: high-volume loads with reconciliation and data-quality checks.</span>
-        </div>
+      <div class="t-item reveal reveal-d1">
+        <div class="t-when">Previously</div>
+        <h3>JPMorgan Chase · Senior Analytics Consultant</h3>
+        <p>Analytics consulting at scale: turning high-volume banking data into insight, with the ETL and reconciliation work needed to make the numbers dependable.</p>
       </div>
-      <div class="xp-item">
-        <div class="xp-when">Previously</div>
-        <div class="xp-what">
-          <strong>NetJets · Data Engineering &amp; BI</strong>
-          <span>Data infrastructure and BI for the world's largest private aviation company.</span>
-        </div>
+      <div class="t-item reveal reveal-d2">
+        <div class="t-when">Previously</div>
+        <h3>NetJets · Data Analyst, BI</h3>
+        <p>Business intelligence and analytics for the world's largest private aviation company: dashboards, reporting, and the data plumbing behind them.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="projects">
-    <h2><span class="hash">#</span> Projects</h2>
+<section id="projects">
+  <div class="wrap">
+    <h2 class="reveal"><span class="hash">#</span> Projects</h2>
+    <p class="sub reveal reveal-d1">Everything here is analytics in disguise: ingest, transform, serve, decide.</p>
     <div class="grid">
-      <div class="card">
-        <a href="https://github.com/maupatel/market-pulse">market-pulse</a>
+      <div class="card reveal">
+        <a class="title" href="https://github.com/maupatel/market-pulse">market-pulse</a>
         <p>Self-running daily market data pipeline on GitHub Actions. Fetches, versions, and publishes index data with zero manual steps.</p>
         <div class="tags"><span class="tag">Python</span><span class="tag">GitHub Actions</span><span class="tag">Pipeline</span></div>
       </div>
-      <div class="card">
-        <a href="https://github.com/maupatel/job-oracle">job-oracle</a>
+      <div class="card reveal reveal-d1">
+        <a class="title" href="https://github.com/maupatel/job-oracle">job-oracle</a>
         <p>Job-search cockpit: aggregates live listings, scores each against your resume, drafts tailored cover letters, tracks applications.</p>
-        <div class="tags"><span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">Scraping</span></div>
+        <div class="tags"><span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">Scoring</span></div>
       </div>
-      <div class="card">
-        <a href="https://github.com/maupatel/ironpath">ironpath</a>
-        <p>Free, ad-free gym do-along PWA. An installable workout companion that guides you through every session.</p>
-        <div class="tags"><span class="tag">PWA</span><span class="tag">JavaScript</span></div>
-      </div>
-      <div class="card">
-        <a href="https://github.com/maupatel/stock-oracle">stock-oracle</a>
+      <div class="card reveal reveal-d2">
+        <a class="title" href="https://github.com/maupatel/stock-oracle">stock-oracle</a>
         <p>Stock-analysis dashboard with live market data, screeners, and technical indicators.</p>
         <div class="tags"><span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">Finance</span></div>
       </div>
-      <div class="card">
-        <a href="https://github.com/maupatel/dfw-apartment-tracker">dfw-apartment-tracker</a>
+      <div class="card reveal reveal-d3">
+        <a class="title" href="https://github.com/maupatel/dfw-apartment-tracker">dfw-apartment-tracker</a>
         <p>Automated pipeline tracking apartment pricing across the DFW market over time.</p>
         <div class="tags"><span class="tag">Python</span><span class="tag">Automation</span></div>
       </div>
-      <div class="card">
-        <a href="https://github.com/maupatel/live-translator">live-translator</a>
+      <div class="card reveal reveal-d4">
+        <a class="title" href="https://github.com/maupatel/ironpath">ironpath</a>
+        <p>Free, ad-free gym do-along PWA. An installable workout companion that guides every session.</p>
+        <div class="tags"><span class="tag">PWA</span><span class="tag">JavaScript</span></div>
+      </div>
+      <div class="card reveal reveal-d5">
+        <a class="title" href="https://github.com/maupatel/live-translator">live-translator</a>
         <p>Real-time in-browser speech translation.</p>
         <div class="tags"><span class="tag">JavaScript</span><span class="tag">Web Speech</span></div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="skills">
-    <h2><span class="hash">#</span> Toolbox</h2>
-    <div class="skills">
-      <span class="skill">Python</span><span class="skill">SQL</span><span class="skill">ETL / ELT</span>
-      <span class="skill">Streamlit</span><span class="skill">Web scraping</span><span class="skill">Data quality</span>
-      <span class="skill">Automation</span><span class="skill">Snowflake</span><span class="skill">AWS</span>
+<section id="skills">
+  <div class="wrap">
+    <h2 class="reveal"><span class="hash">#</span> Skills</h2>
+    <p class="sub reveal reveal-d1">The analytics core, and the engineering habits that keep it honest.</p>
+    <div class="skill-groups">
+      <div class="skill-group reveal">
+        <h3>Analytics &amp; BI</h3>
+        <div class="chips">
+          <span class="chip">SQL</span><span class="chip">Dashboards</span><span class="chip">KPI design</span>
+          <span class="chip">Experimentation</span><span class="chip">Storytelling</span>
+        </div>
+      </div>
+      <div class="skill-group reveal reveal-d1">
+        <h3>Data &amp; Pipelines</h3>
+        <div class="chips">
+          <span class="chip">Python</span><span class="chip">ETL / ELT</span><span class="chip">Data quality</span>
+          <span class="chip">Snowflake</span><span class="chip">AWS</span>
+        </div>
+      </div>
+      <div class="skill-group reveal reveal-d2">
+        <h3>Automation &amp; Apps</h3>
+        <div class="chips">
+          <span class="chip">Streamlit</span><span class="chip">GitHub Actions</span><span class="chip">Web scraping</span>
+          <span class="chip">CI/CD</span><span class="chip">PWA</span>
+        </div>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <footer>
-    <p>© 2026 Maulik Patel · <a href="https://github.com/maupatel/maupatel.github.io">Source</a></p>
-  </footer>
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-band reveal">
+      <h2>Let's talk data.</h2>
+      <p>Whether it's analytics, BI, or the pipeline behind them, I'm always happy to compare notes.</p>
+      <div class="cta-row" style="justify-content:center; opacity:1; animation:none;">
+        <a class="btn primary" href="mailto:maulik737@gmail.com">maulik737@gmail.com</a>
+        <a class="btn" href="https://www.linkedin.com/in/maupatel">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-</div>
+<footer>
+  <p>© 2026 Maulik Patel · Designed and hand-coded, no frameworks · <a href="https://github.com/maupatel/maupatel.github.io">Source</a></p>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Scroll progress + nav state */
+  var progress = document.getElementById("progress");
+  var nav = document.getElementById("nav");
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    progress.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + "%";
+    nav.classList.toggle("scrolled", h.scrollTop > 8);
+  }
+  document.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  /* Reveal on scroll */
+  var revealables = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window && !reduced) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.14 });
+    revealables.forEach(function (el) { io.observe(el); });
+  } else {
+    revealables.forEach(function (el) { el.classList.add("in"); });
+  }
+
+  /* Scrollspy */
+  var sections = ["top", "experience", "projects", "skills", "contact"];
+  var links = {};
+  document.querySelectorAll("nav a").forEach(function (a) {
+    links[a.getAttribute("href").slice(1)] = a;
+  });
+  var spy = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        Object.keys(links).forEach(function (k) { links[k].classList.remove("active"); });
+        var l = links[e.target.id];
+        if (l) l.classList.add("active");
+      }
+    });
+  }, { rootMargin: "-45% 0px -50% 0px" });
+  sections.forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) spy.observe(el);
+  });
+
+  /* Animated counters */
+  var counted = new WeakSet();
+  var counters = document.querySelectorAll(".num[data-count]");
+  var cio = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting || counted.has(e.target)) return;
+      counted.add(e.target);
+      var el = e.target;
+      var target = parseInt(el.getAttribute("data-count"), 10);
+      var suffix = el.getAttribute("data-suffix") || "";
+      if (reduced) { el.textContent = target + suffix; return; }
+      var t0 = null, dur = 1400;
+      function step(ts) {
+        if (!t0) t0 = ts;
+        var p = Math.min((ts - t0) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(target * eased) + suffix;
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  }, { threshold: 0.6 });
+  counters.forEach(function (el) { cio.observe(el); });
+
+  /* Card tilt + cursor glow */
+  document.querySelectorAll(".card").forEach(function (card) {
+    card.addEventListener("mousemove", function (ev) {
+      var r = card.getBoundingClientRect();
+      var x = ev.clientX - r.left, y = ev.clientY - r.top;
+      card.style.setProperty("--mx", (x / r.width) * 100 + "%");
+      card.style.setProperty("--my", (y / r.height) * 100 + "%");
+      if (reduced) return;
+      var rx = ((y / r.height) - 0.5) * -6;
+      var ry = ((x / r.width) - 0.5) * 6;
+      card.style.transform = "perspective(700px) rotateX(" + rx + "deg) rotateY(" + ry + "deg) translateY(-4px)";
+    });
+    card.addEventListener("mouseleave", function () {
+      card.style.transform = "";
+    });
+  });
+
+  /* Particle network in hero */
+  var canvas = document.getElementById("particles");
+  if (canvas && !reduced) {
+    var ctx = canvas.getContext("2d");
+    var pts = [], W, H, raf;
+    var accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
+    function resize() {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = canvas.clientWidth; H = canvas.clientHeight;
+      canvas.width = W * dpr; canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var n = Math.min(70, Math.floor(W * H / 22000));
+      pts = [];
+      for (var i = 0; i < n; i++) {
+        pts.push({
+          x: Math.random() * W, y: Math.random() * H,
+          vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35
+        });
+      }
+    }
+    function tick() {
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < pts.length; i++) {
+        var p = pts[i];
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+        ctx.globalAlpha = 0.55;
+        ctx.fillStyle = accent;
+        ctx.beginPath(); ctx.arc(p.x, p.y, 1.6, 0, Math.PI * 2); ctx.fill();
+        for (var j = i + 1; j < pts.length; j++) {
+          var q = pts[j], dx = p.x - q.x, dy = p.y - q.y;
+          var d2 = dx * dx + dy * dy;
+          if (d2 < 130 * 130) {
+            ctx.globalAlpha = 0.10 * (1 - d2 / (130 * 130));
+            ctx.strokeStyle = accent;
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke();
+          }
+        }
+      }
+      raf = requestAnimationFrame(tick);
+    }
+    resize(); tick();
+    window.addEventListener("resize", resize);
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) cancelAnimationFrame(raf); else tick();
+    });
+  }
+})();
+</script>
 </body>
 </html>
